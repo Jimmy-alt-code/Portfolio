@@ -7,19 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'ngrok-skip-browser-warning',
-            value: 'true',
-          },
-        ],
-      },
-    ];
-  },
+  // Remove headers() for static export - not supported
 };
 
 export default nextConfig;
