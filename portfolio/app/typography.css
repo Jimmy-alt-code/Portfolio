@@ -1,0 +1,92 @@
+/* Typography enhancements for professional portfolio */
+
+/* Font scale and vertical rhythm */
+:root {
+  --font-scale-ratio: 1.25;
+  --base-font-size: 1.125rem;
+  --line-height-ratio: 1.5;
+  --letter-spacing-body: 0.01em;
+  --letter-spacing-heading: -0.02em;
+}
+
+/* Heading styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* Body text */
+p, li, blockquote {
+  font-family: var(--font-body);
+  letter-spacing: var(--letter-spacing-body);
+  line-height: var(--line-height-ratio);
+}
+
+/* Navigation and UI elements */
+nav, button, .btn, a.btn {
+  font-family: var(--font-sans);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+/* Code blocks */
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+/* Responsive typography */
+@media (min-width: 768px) {
+  :root {
+    --base-font-size: 1.175rem;
+  }
+  
+  h1 {
+    font-size: calc(var(--base-font-size) * var(--font-scale-ratio) * var(--font-scale-ratio) * var(--font-scale-ratio) * var(--font-scale-ratio));
+  }
+  
+  h2 {
+    font-size: calc(var(--base-font-size) * var(--font-scale-ratio) * var(--font-scale-ratio) * var(--font-scale-ratio));
+  }
+  
+  h3 {
+    font-size: calc(var(--base-font-size) * var(--font-scale-ratio) * var(--font-scale-ratio));
+  }
+  
+  h4 {
+    font-size: calc(var(--base-font-size) * var(--font-scale-ratio));
+  }
+}
+
+/* Professional touches */
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+.font-body {
+  font-family: var(--font-body);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Enhance readability */
+.prose {
+  max-width: 70ch;
+  line-height: 1.6;
+}
+
+/* Professional spacing for paragraphs */
+p + p {
+  margin-top: 1.25em;
+}

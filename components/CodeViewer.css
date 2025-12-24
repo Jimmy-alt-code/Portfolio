@@ -1,0 +1,306 @@
+.code-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.code-viewer-modal {
+  background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.code-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.code-viewer-title h3 {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.code-viewer-title p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.code-viewer-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.code-viewer-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.code-viewer-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+}
+
+.code-viewer-tab {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.code-viewer-tab:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.code-viewer-tab.active {
+  color: white;
+  border-bottom-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.code-viewer-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.code-viewer-file-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-viewer-filename {
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.code-viewer-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.code-viewer-copy {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 6px;
+  color: #3b82f6;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.code-viewer-copy:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.code-viewer-code {
+  flex: 1;
+  overflow: auto;
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 1.5rem 1.5rem 1.5rem;
+  border-radius: 8px;
+}
+
+.code-viewer-code pre {
+  margin: 0;
+  padding: 1.5rem;
+  overflow: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #e6edf3;
+}
+
+.code-viewer-code code {
+  color: inherit;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/* Syntax highlighting for Python */
+.code-viewer-code pre code {
+  color: #e6edf3;
+}
+
+.code-viewer-code pre code .keyword {
+  color: #ff7b72;
+}
+
+.code-viewer-code pre code .string {
+  color: #a5d6ff;
+}
+
+.code-viewer-code pre code .comment {
+  color: #7d8590;
+}
+
+.code-viewer-code pre code .function {
+  color: #d2a8ff;
+}
+
+.code-viewer-code pre code .class {
+  color: #ffa657;
+}
+
+.code-viewer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-viewer-info {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.code-viewer-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.code-viewer-github {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.code-viewer-github:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #60a5fa;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .code-viewer-modal {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .code-viewer-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .code-viewer-title h3 {
+    font-size: 1.125rem;
+  }
+  
+  .code-viewer-tabs {
+    padding: 0;
+  }
+  
+  .code-viewer-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .code-viewer-file-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .code-viewer-code {
+    margin: 0 1rem 1rem 1rem;
+  }
+  
+  .code-viewer-code pre {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .code-viewer-footer {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+}
+
+/* Scrollbar styling */
+.code-viewer-code::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.code-viewer-code::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.code-viewer-code::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.code-viewer-code::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
