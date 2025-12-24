@@ -1,6 +1,5 @@
 "use client";
 
-import PixelTransition from "@/components/PixelTransition";
 import ProfileCard from "@/components/ProfileCard";
 import Prism from "@/components/Prism";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -8,12 +7,21 @@ import TextPressure from "@/components/TextPressure";
 import CodeViewer from "@/components/CodeViewer";
 import { useRef, useState } from 'react';
 
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image?: string;
+  technologies: string[];
+  year: string;
+}
+
 export default function Home() {
   const scrollContainerRef = useRef(null);
   const [codeViewerOpen, setCodeViewerOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const handleViewCode = (project) => {
+  const handleViewCode = (project: Project) => {
     setSelectedProject(project);
     setCodeViewerOpen(true);
   };
@@ -108,8 +116,8 @@ export default function Home() {
                   {/* Quote content */}
                   <blockquote className="text-center lg:text-left relative">
                     {/* Quote marks - hidden on mobile */}
-                    <div className="hidden sm:block absolute -top-2 -left-2 text-3xl sm:text-4xl text-blue-400/20 font-serif">"</div>
-                    <div className="hidden sm:block absolute -bottom-2 -right-2 text-3xl sm:text-4xl text-blue-400/20 font-serif">"</div>
+                    <div className="hidden sm:block absolute -top-2 -left-2 text-3xl sm:text-4xl text-blue-400/20 font-serif">&quot;</div>
+                    <div className="hidden sm:block absolute -bottom-2 -right-2 text-3xl sm:text-4xl text-blue-400/20 font-serif">&quot;</div>
                     
                     <div className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-medium leading-relaxed relative z-10">
                       <div className="text-white mb-2 sm:mb-3">
@@ -126,7 +134,7 @@ export default function Home() {
                         <div className="flex items-center gap-1.5 sm:gap-2">
                           <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full"></div>
                           <span className="text-white/80 text-xs sm:text-sm font-mono">
-                            <span className="text-blue-400">const</span> philosophy = <span className="text-yellow-400">'Irfan's Code'</span>;
+                            <span className="text-blue-400">const</span> philosophy = <span className="text-yellow-400">&apos;Irfan&apos;s Code&apos;</span>;
                           </span>
                         </div>
                       </div>
@@ -331,9 +339,9 @@ export default function Home() {
             About
           </h2>
           <p className="mt-4 sm:mt-6 text-white/80 text-sm sm:text-base leading-6 sm:leading-7">
-            <ScrollReveal scrollContainerRef={scrollContainerRef}>Hi, I'm Irfan, an AI & Data Science engineering student passionate about building intelligent, real-world solutions. </ScrollReveal>
+            <ScrollReveal scrollContainerRef={scrollContainerRef}>Hi, I&apos;m Irfan, an AI & Data Science engineering student passionate about building intelligent, real-world solutions. </ScrollReveal>
             <ScrollReveal scrollContainerRef={scrollContainerRef}>I love turning ideas into impactful projects — from developing Rakt Dhara, a blood bank management system, to creating DeepFake Radar, an AI-based deepfake detection system. </ScrollReveal>
-            <ScrollReveal scrollContainerRef={scrollContainerRef}>I'm currently enhancing my skills in Python, Machine Learning, and AI agents, while improving my communication and problem-solving abilities. </ScrollReveal>
+            <ScrollReveal scrollContainerRef={scrollContainerRef}>I&apos;m currently enhancing my skills in Python, Machine Learning, and AI agents, while improving my communication and problem-solving abilities. </ScrollReveal>
             <ScrollReveal scrollContainerRef={scrollContainerRef}>My goal is to become an AI engineer who combines innovation with purpose, building technology that truly makes a difference.</ScrollReveal>
           </p>
         </div>
@@ -493,7 +501,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl mb-8 font-bold tracking-tight text-white">
             Contact
           </h2>
-          <p className="mt-2 sm:mt-3 text-white/80 text-sm sm:text-base leading-5 sm:leading-6 font-body px-1 sm:px-0">I'm open to opportunities and collaborations. Feel free to reach out:</p>
+          <p className="mt-2 sm:mt-3 text-white/80 text-sm sm:text-base leading-5 sm:leading-6 font-body px-1 sm:px-0">I&apos;m open to opportunities and collaborations. Feel free to reach out:</p>
 
           <div className="mt-4 sm:mt-6 grid gap-3 sm:gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-3">
             <a
