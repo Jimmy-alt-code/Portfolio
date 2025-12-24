@@ -3,13 +3,6 @@ import { gsap } from 'gsap';
 
 import './ScrollReveal.css'; 
 
-// Only import ScrollTrigger on the client side
-let ScrollTrigger;
-if (typeof window !== 'undefined') {
-  ScrollTrigger = require('gsap/ScrollTrigger').ScrollTrigger;
-  gsap.registerPlugin(ScrollTrigger);
-} 
-
 const ScrollReveal = ({ 
   children, 
   scrollContainerRef, 
@@ -38,55 +31,44 @@ const ScrollReveal = ({
 
   useEffect(() => { 
     // Only run on client side
-    if (typeof window === 'undefined' || !ScrollTrigger) return;
+    if (typeof window === 'undefined') return;
     
     const el = containerRef.current; 
-    if (!el) return; 
+    if (!el) return;
 
-    const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window; 
+    let cleanup = null;
 
-    gsap.fromTo( 
-      el, 
-      { transformOrigin: '0% 50%', rotate: baseRotation }, 
-      { 
-        ease: 'none', 
-        rotate: 0, 
-        scrollTrigger: { 
-          trigger: el, 
-          scroller, 
-          start: 'top bottom', 
-          end: rotationEnd, 
-          scrub: true 
-        } 
-      } 
-    ); 
+    // Dynamically import ScrollTrigger
+    import('gsap/ScrollTrigger').then((module) => {
+      const ScrollTrigger = module.ScrollTrigger;
+      gsap.registerPlugin(ScrollTrigger); 
 
-    const wordElements = el.querySelectorAll('.word'); 
+      const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window; 
 
-    gsap.fromTo( 
-      wordElements, 
-      { opacity: baseOpacity, willChange: 'opacity' }, 
-      { 
-        ease: 'none', 
-        opacity: 1, 
-        stagger: 0.05, 
-        scrollTrigger: { 
-          trigger: el, 
-          scroller, 
-          start: 'top bottom-=20%', 
-          end: wordAnimationEnd, 
-          scrub: true 
-        } 
-      } 
-    ); 
-
-    if (enableBlur) { 
       gsap.fromTo( 
-        wordElements, 
-        { filter: `blur(${blurStrength}px)` }, 
+        el, 
+        { transformOrigin: '0% 50%', rotate: baseRotation }, 
         { 
           ease: 'none', 
-          filter: 'blur(0px)', 
+          rotate: 0, 
+          scrollTrigger: { 
+            trigger: el, 
+            scroller, 
+            start: 'top bottom', 
+            end: rotationEnd, 
+            scrub: true 
+          } 
+        } 
+      ); 
+
+      const wordElements = el.querySelectorAll('.word'); 
+
+      gsap.fromTo( 
+        wordElements, 
+        { opacity: baseOpacity, willChange: 'opacity' }, 
+        { 
+          ease: 'none', 
+          opacity: 1, 
           stagger: 0.05, 
           scrollTrigger: { 
             trigger: el, 
@@ -97,13 +79,36 @@ const ScrollReveal = ({
           } 
         } 
       ); 
-    } 
+
+      if (enableBlur) { 
+        gsap.fromTo( 
+          wordElements, 
+          { filter: `blur(${blurStrength}px)` }, 
+          { 
+            ease: 'none', 
+            filter: 'blur(0px)', 
+            stagger: 0.05, 
+            scrollTrigger: { 
+              trigger: el, 
+              scroller, 
+              start: 'top bottom-=20%', 
+              end: wordAnimationEnd, 
+              scrub: true 
+            } 
+          } 
+        ); 
+      } 
+
+      cleanup = () => { 
+        if (ScrollTrigger) {
+          ScrollTrigger.getAll().forEach(trigger => trigger.kill()); 
+        }
+      };
+    });
 
     return () => { 
-      if (ScrollTrigger) {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill()); 
-      }
-    }; 
+      if (cleanup) cleanup();
+    };
   }, [scrollContainerRef, enableBlur, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, blurStrength]); 
 
   return ( 
