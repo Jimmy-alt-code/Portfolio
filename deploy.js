@@ -47,7 +47,10 @@ console.log('🚀 Starting deployment to gh-pages branch...\n');
 try {
   // Step 1: Build the project
   console.log('📦 Building project...');
-  execSync('npm run build', { stdio: 'inherit' });
+  execSync('npm run build', { 
+    stdio: 'inherit',
+    env: { ...process.env, NODE_ENV: 'production' }
+  });
 
   // Step 2: Check if out directory exists
   const outDir = path.join(process.cwd(), 'out');
@@ -66,28 +69,21 @@ try {
     removeDir(tempDir);
   }
 
-  // Step 4: Clone or initialize gh-pages branch
+  // Step 4: Initialize gh-pages branch
   console.log('🌿 Setting up gh-pages branch...');
-  const remoteUrl = execSync('git config --get remote.origin.url', { encoding: 'utf-8' }).trim();
+  const remoteUrl = execSync('git config --get remote.origin.url', { encoding: 'utf-8', shell: true }).trim();
   
-  // Check if gh-pages branch exists remotely
-  let ghPagesExists = false;
+  // Always create fresh deployment directory
+  console.log('📝 Initializing deployment repository...');
+  fs.mkdirSync(tempDir, { recursive: true });
+  execSync('git init', { cwd: tempDir, stdio: 'inherit', shell: true });
+  execSync('git checkout -b gh-pages', { cwd: tempDir, stdio: 'inherit', shell: true });
+  
+  // Check if remote already exists before adding
   try {
-    execSync('git ls-remote --heads origin gh-pages', { stdio: 'pipe', encoding: 'utf-8' });
-    ghPagesExists = true;
+    execSync('git remote get-url origin', { cwd: tempDir, stdio: 'pipe', shell: true });
   } catch (e) {
-    // Branch doesn't exist yet
-  }
-
-  if (ghPagesExists) {
-    console.log('📥 Cloning gh-pages branch...');
-    execSync(`git clone -b gh-pages --single-branch "${remoteUrl}" "${tempDir}"`, { stdio: 'inherit' });
-  } else {
-    console.log('📝 Creating new gh-pages branch...');
-    fs.mkdirSync(tempDir, { recursive: true });
-    execSync(`git init`, { cwd: tempDir, stdio: 'inherit' });
-    execSync(`git checkout -b gh-pages`, { cwd: tempDir, stdio: 'inherit' });
-    execSync(`git remote add origin "${remoteUrl}"`, { cwd: tempDir, stdio: 'inherit' });
+    execSync(`git remote add origin "${remoteUrl}"`, { cwd: tempDir, stdio: 'inherit', shell: true });
   }
 
   // Step 5: Copy build output to temp directory
@@ -118,19 +114,28 @@ try {
     }
   }
 
+  // Add .nojekyll file to prevent Jekyll processing (important for Next.js static export)
+  fs.writeFileSync(path.join(tempDir, '.nojekyll'), '');
+
   // Step 6: Commit and push
   console.log('💾 Committing changes...');
-  execSync(`git add -A`, { cwd: tempDir, stdio: 'inherit' });
+  execSync(`git add -A`, { cwd: tempDir, stdio: 'inherit', shell: true });
   
-  const commitMessage = process.argv[2] || `Deploy: ${new Date().toISOString()}`;
+  const commitMessage = (process.argv[2] || `Deploy: ${new Date().toISOString()}`).replace(/"/g, '\\"');
   try {
-    execSync(`git commit -m "${commitMessage}"`, { cwd: tempDir, stdio: 'inherit' });
+    execSync(`git commit -m "${commitMessage}"`, { cwd: tempDir, stdio: 'inherit', shell: true });
   } catch (e) {
-    console.log('⚠️  No changes to commit (files are up to date)');
+    // Check if there are any changes to commit
+    const status = execSync(`git status --porcelain`, { cwd: tempDir, encoding: 'utf-8', shell: true }).trim();
+    if (status.length === 0) {
+      console.log('⚠️  No changes to commit (files are up to date)');
+    } else {
+      throw e;
+    }
   }
 
   console.log('🚀 Pushing to gh-pages branch...');
-  execSync(`git push origin gh-pages --force`, { cwd: tempDir, stdio: 'inherit' });
+  execSync(`git push origin gh-pages --force`, { cwd: tempDir, stdio: 'inherit', shell: true });
 
   // Step 7: Clean up
   console.log('🧹 Cleaning up...');

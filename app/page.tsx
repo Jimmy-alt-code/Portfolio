@@ -16,6 +16,23 @@ interface Project {
   year: string;
 }
 
+// Base path for GitHub Pages deployment
+const BASE_PATH = '/Portfolio';
+
+// Helper function to get the correct path for assets (handles GitHub Pages basePath)
+const getAssetPath = (path: string) => {
+  // Check if we're in the browser and on GitHub Pages
+  if (typeof window !== 'undefined') {
+    const isGitHubPages = window.location.hostname.includes('github.io') || 
+                          window.location.pathname.startsWith(BASE_PATH);
+    if (isGitHubPages) {
+      return `${BASE_PATH}${path}`;
+    }
+  }
+  // For local development, return path as-is
+  return path;
+};
+
 export default function Home() {
   const scrollContainerRef = useRef(null);
   const [codeViewerOpen, setCodeViewerOpen] = useState(false);
@@ -204,7 +221,7 @@ export default function Home() {
                 {/* Main illustration */}
                 <div className="relative z-10 float">
                   <img
-                    src="/illust.png"
+                    src={getAssetPath("/illust.png")}
                     alt="Professional working on a laptop illustration"
                     loading="lazy"
                     className="w-[200px] xs:w-[240px] sm:w-[320px] md:w-[400px] lg:w-[440px] xl:w-[540px] max-w-full h-auto scale-in stagger-1 illust-toned-down drop-shadow-2xl"
@@ -227,8 +244,8 @@ export default function Home() {
               name="IRFAN"
               title="Software Engineer"
               handle="its_jimmy "
-              avatarUrl="/irfan.png"
-              miniAvatarUrl="/irfan.png"
+              avatarUrl={getAssetPath("/irfan.png")}
+              miniAvatarUrl={getAssetPath("/irfan.png")}
               showBehindGradient
               onContactClick={() => window.open("https://linkedin.com/in/irfan-fakir-393bb8330", "_blank", "noopener,noreferrer")}
             />
@@ -265,7 +282,7 @@ export default function Home() {
                     {project.id === 1 && (
                       <div className="relative h-32 sm:h-36 overflow-hidden">
                         <img
-                          src={project.image}
+                          src={getAssetPath(project.image)}
                           alt={`${project.title} project screenshot`}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                           loading="lazy"
@@ -418,7 +435,7 @@ export default function Home() {
               {project.id === 1 && (
                 <div className="relative h-48 sm:h-56 overflow-hidden">
                   <img
-                    src={project.image}
+                    src={getAssetPath(project.image)}
                     alt={`${project.title} project screenshot`}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
