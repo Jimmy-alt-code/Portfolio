@@ -16,22 +16,20 @@ interface Project {
   year: string;
 }
 
-// Base path for GitHub Pages deployment
+// Base path for GitHub Pages deployment (must match next.config.ts basePath)
 const BASE_PATH = '/Portfolio';
 
 // Helper function to get the correct path for assets (handles GitHub Pages basePath)
 const getAssetPath = (path: string) => {
-  // Check if we're in the browser and on GitHub Pages
-  if (typeof window !== 'undefined') {
-    const isGitHubPages = window.location.hostname.includes('github.io') || 
-                          window.location.pathname.startsWith(BASE_PATH);
-    if (isGitHubPages) {
-      return `${BASE_PATH}${path}`;
-    }
-  }
-  // For local development, return path as-is
-  return path;
+  // Always use basePath prefix for production builds (GitHub Pages deployment)
+  // Next.js basePath handles routing but we need to manually prefix static assets
+  return `${BASE_PATH}${path}`;
 };
+
+// Resume file configuration - Change this to switch between PDF and Word format
+// Options: "/resume.pdf" or "/resume.docx"
+const RESUME_FILE = "/resume.docx";
+const RESUME_DOWNLOAD_NAME = "Irfan_Fakir_Resume.docx"; // Change to .pdf if using PDF
 
 export default function Home() {
   const scrollContainerRef = useRef(null);
@@ -338,7 +336,10 @@ export default function Home() {
                   Hire Me
                 </a>
                 <a
-                  href="#"
+                  href={getAssetPath(RESUME_FILE)}
+                  download={RESUME_DOWNLOAD_NAME}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full sm:w-auto text-center rounded-full border border-white/20 bg-white/10 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 text-xs sm:text-sm md:text-base font-medium text-white backdrop-blur hover:border-white/30 transition-all duration-300"
                 >
                   Download Resume
